@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opposite Souls - With Real Characters!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .story-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .story-header {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .story-title {
+            font-size: 32px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .scene-container {
+            padding: 40px;
+            min-height: 60vh;
+        }
+
+        .character-showcase {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 30px 0;
+            padding: 30px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .character-display {
+            text-align: center;
+            position: relative;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .character-display.kai {
+            animation-delay: 0s;
+        }
+
+        .character-display.zephyr {
+            animation-delay: 1s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .character-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 20px;
+            border: 4px solid white;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            object-fit: cover;
+            margin-bottom: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .character-image:hover {
+            transform: scale(1.05);
+        }
+
+        .character-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .character-description {
+            font-size: 14px;
+            color: #666;
+            max-width: 200px;
+        }
+
+        .story-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin: 20px 0;
+            line-height: 1.8;
+        }
+
+        .dialogue-section {
+            margin: 25px 0;
+            padding: 20px;
+            border-radius: 15px;
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+        }
+
+        .dialogue-section.kai {
+            background: #e3f2fd;
+            border-left: 5px solid #2196f3;
+        }
+
+        .dialogue-section.zephyr {
+            background: #f3e5f5;
+            border-left: 5px solid #9c27b0;
+            flex-direction: row-reverse;
+        }
+
+        .dialogue-section.narrator {
+            background: #f8f9fa;
+            border-left: 5px solid #6c757d;
+            justify-content: center;
+            text-align: center;
+            font-style: italic;
+        }
+
+        .dialogue-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .dialogue-content {
+            flex: 1;
+        }
+
+        .speaker-name {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .dialogue-text {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .choices-area {
+            background: #f8f9fa;
+            padding: 30px;
+            border-top: 1px solid #e9ecef;
+            text-align: center;
+        }
+
+        .choices-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        .choice-button {
+            display: block;
+            width: 100%;
+            max-width: 500px;
+            margin: 15px auto;
+            padding: 20px;
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .choice-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .image-upload-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .upload-area {
+            border: 2px dashed #4ecdc4;
+            border-radius: 15px;
+            padding: 40px;
+            margin: 20px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upload-area:hover {
+            border-color: #44a08d;
+            background: rgba(78, 205, 196, 0.05);
+        }
+
+        .upload-area.dragover {
+            border-color: #44a08d;
+            background: rgba(78, 205, 196, 0.1);
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .preview-container {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            gap: 20px;
+        }
+
+        .character-preview {
+            text-align: center;
+        }
+
+        .character-preview img {
+            width: 150px;
+            height: 150px;
+            border-radius: 15px;
+            border: 3px solid #4ecdc4;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+
+        .character-preview label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .start-story-btn {
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .start-story-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="story-container">
+        <div class="story-header">
+            <h1 class="story-title">🎭 Opposite Souls</h1>
+            <p>Interactive Story with Your Characters</p>
+        </div>
+
+        <!-- Image Upload Section -->
+        <div class="scene-container" id="uploadSection">
+            <div class="image-upload-section">
+                <h2>Upload Your Character Images</h2>
+                <p>Please upload the images of your characters to see them in the story!</p>
+                
+                <div class="preview-container">
+                    <div class="character-preview">
+                        <label>Kai (White-haired character)</label>
+                        <div class="upload-area" onclick="document.getElementById('kaiInput').click()">
+                            <img id="kaiPreview" src="" alt="Kai Preview" style="display: none;">
+                            <div id="kaiPlaceholder">Click to upload Kai's image</div>
+                        </div>
+                        <input type="file" id="kaiInput" class="file-input" accept="image/*" onchange="handleImageUpload('kai', this)">
+                    </div>
+                    
+                    <div class="character-preview">
+                        <label>Zephyr (Blue-haired character)</label>
+                        <div class="upload-area" onclick="document.getElementById('zephyrInput').click()">
+                            <img id="zephyrPreview" src="" alt="Zephyr Preview" style="display: none;">
+                            <div id="zephyrPlaceholder">Click to upload Zephyr's image</div>
+                        </div>
+                        <input type="file" id="zephyrInput" class="file-input" accept="image/*" onchange="handleImageUpload('zephyr', this)">
+                    </div>
+                </div>
+                
+                <button class="start-story-btn" id="startStoryBtn" onclick="startStory()" style="display: none;">
+                    🌟 Start Interactive Story! 🌟
+                </button>
+            </div>
+        </div>
+
+        <!-- Story Content (Initially Hidden) -->
+        <div class="scene-container" id="storySection" style="display: none;">
+            <div class="character-showcase" id="characterShowcase">
+                <!-- Character images will be displayed here -->
+            </div>
+            
+            <div class="story-content" id="storyContent">
+                <!-- Story content will be inserted here -->
+            </div>
+            
+            <div class="choices-area" id="choicesArea" style="display: none;">
+                <div class="choices-title">What happens next?</div>
+                <div id="choiceButtons">
+                    <!-- Choice buttons will be inserted here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let characterImages = {
+            kai: null,
+            zephyr: null
+        };
+
+        let currentScene = 0;
+        let storyScenes = [];
+
+        function handleImageUpload(character, input) {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    characterImages[character] = e.target.result;
+                    
+                    // Update preview
+                    const preview = document.getElementById(character + 'Preview');
+                    const placeholder = document.getElementById(character + 'Placeholder');
+                    
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                    placeholder.style.display = 'none';
+                    
+                    // Check if both images are uploaded
+                    checkImagesComplete();
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function checkImagesComplete() {
+            if (characterImages.kai && characterImages.zephyr) {
+                document.getElementById('startStoryBtn').style.display = 'block';
+            }
+        }
+
+        function startStory() {
+            document.getElementById('uploadSection').style.display = 'none';
+            document.getElementById('storySection').style.display = 'block';
+            
+            setupStory();
+            renderScene();
+        }
+
+        function setupStory() {
+            storyScenes = [
+                {
+                    title: "The Library Encounter",
+                    content: [
+                        {
+                            type: "narrator",
+                            text: "The afternoon sun filtered through the tall library windows, casting dancing shadows across the quiet reading nooks. Kai sat in his favorite corner, silver hair catching the light as he carefully sketched cloud formations."
+                        },
+                        {
+                            type: "narrator", 
+                            text: "Then the library doors burst open with a sound like thunder..."
+                        },
+                        {
+                            type: "zephyr",
+                            speaker: "Zephyr",
+                            text: "Yo, where's the art section? This place is like a maze!"
+                        },
+                        {
+                            type: "kai",
+                            speaker: "Kai", 
+                            text: "*looks up nervously* Um... third aisle from the back. I could... show you if you want?"
+                        }
+                    ],
+                    choices: [
+                        {
+                            text: "Kai offers to help find the art books",
+                            next: 1
+                        },
+                        {
+                            text: "Zephyr asks about Kai's sketches",
+                            next: 2
+                        }
+                    ]
+                },
+                {
+                    title: "A Growing Friendship",
+                    content: [
+                        {
+                            type: "zephyr",
+                            speaker: "Zephyr",
+                            text: "Really? That'd be awesome! I'm Zephyr, ze/zir pronouns. And you are?"
+                        },
+                        {
+                            type: "kai",
+                            speaker: "Kai",
+                            text: "K-Kai... *stands up nervously* I was just sketching. I know where everything is here."
+                        },
+                        {
+                            type: "narrator",
+                            text: "As they walked through the library together, an unlikely friendship began to bloom between these two opposite souls."
+                        }
+                    ],
+                    choices: [
+                        {
+                            text: "Continue their adventure",
+                            next: "ending"
+                        }
+                    ]
+                }
+            ];
+        }
+
+        function renderScene() {
+            const scene = storyScenes[currentScene];
+            
+            // Update character showcase
+            updateCharacterShowcase();
+            
+            // Update story content
+            const storyContent = document.getElementById('storyContent');
+            let contentHTML = '';
+            
+            scene.content.forEach(item => {
+                if (item.type === 'narrator') {
+                    contentHTML += `
+                        <div class="dialogue-section narrator">
+                            <div class="dialogue-content">
+                                <div class="dialogue-text">${item.text}</div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    const character = item.type;
+                    const avatarSrc = characterImages[character];
+                    
+                    contentHTML += `
+                        <div class="dialogue-section ${character}">
+                            <img class="dialogue-avatar" src="${avatarSrc}" alt="${character}">
+                            <div class="dialogue-content">
+                                <div class="speaker-name">${item.speaker}</div>
+                                <div class="dialogue-text">${item.text}</div>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+            
+            storyContent.innerHTML = contentHTML;
+            
+            // Show choices
+            if (scene.choices) {
+                renderChoices(scene.choices);
+                document.getElementById('choicesArea').style.display = 'block';
+            } else {
+                document.getElementById('choicesArea').style.display = 'none';
+            }
+        }
+
+        function updateCharacterShowcase() {
+            const showcase = document.getElementById('characterShowcase');
+            showcase.innerHTML = `
+                <div class="character-display kai">
+                    <img class="character-image" src="${characterImages.kai}" alt="Kai">
+                    <div class="character-name">Kai</div>
+                    <div class="character-description">The gentle artist who finds beauty in quiet moments</div>
+                </div>
+                <div class="character-display zephyr">
+                    <img class="character-image" src="${characterImages.zephyr}" alt="Zephyr">
+                    <div class="character-name">Zephyr</div>
+                    <div class="character-description">The bold creator with a heart of gold</div>
+                </div>
+            `;
+        }
+
+        function renderChoices(choices) {
+            const choiceButtons = document.getElementById('choiceButtons');
+            let choicesHTML = '';
+            
+            choices.forEach((choice, index) => {
+                choicesHTML += `
+                    <button class="choice-button" onclick="makeChoice(${index})">
+                        ${choice.text}
+                    </button>
+                `;
+            });
+            
+            choiceButtons.innerHTML = choicesHTML;
+        }
+
+        function makeChoice(choiceIndex) {
+            const scene = storyScenes[currentScene];
+            const choice = scene.choices[choiceIndex];
+            
+            if (choice.next === "ending") {
+                showEnding();
+            } else if (choice.next < storyScenes.length) {
+                currentScene = choice.next;
+                setTimeout(() => {
+                    renderScene();
+                }, 300);
+            }
+        }
+
+        function showEnding() {
+            const storyContent = document.getElementById('storyContent');
+            const choicesArea = document.getElementById('choicesArea');
+            
+            storyContent.innerHTML = `
+                <div class="dialogue-section narrator">
+                    <div class="dialogue-content">
+                        <div style="text-align: center; font-size: 24px; font-weight: bold; margin-bottom: 20px;">
+                            The Beginning of a Beautiful Friendship
+                        </div>
+                        <div style="text-align: center; font-size: 18px; line-height: 1.6;">
+                            From that day forward, Kai and Zephyr became inseparable. Their opposite personalities complemented each other perfectly - Kai's gentle nature balanced Zephyr's bold spirit, while Zephyr's confidence helped Kai find his voice.
+                            <br><br>
+                            Together, they learned that the most beautiful art comes from unexpected friendships and seeing beyond first impressions.
+                        </div>
+                        <div style="text-align: center; margin-top: 30px;">
+                            <button class="choice-button" onclick="location.reload()" style="max-width: 300px;">
+                                🔄 Start Over with New Images
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            choicesArea.style.display = 'none';
+        }
+
+        // Drag and drop functionality
+        function setupDragAndDrop() {
+            const uploadAreas = document.querySelectorAll('.upload-area');
+            
+            uploadAreas.forEach(area => {
+                area.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    area.classList.add('dragover');
+                });
+                
+                area.addEventListener('dragleave', (e) => {
+                    e.preventDefault();
+                    area.classList.remove('dragover');
+                });
+                
+                area.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    area.classList.remove('dragover');
+                    
+                    const files = e.dataTransfer.files;
+                    if (files.length > 0) {
+                        const character = area.parentElement.querySelector('.file-input').id.replace('Input', '');
+                        const input = document.getElementById(character + 'Input');
+                        input.files = files;
+                        handleImageUpload(character, input);
+                    }
+                });
+            });
+        }
+
+        // Initialize drag and drop when page loads
+        document.addEventListener('DOMContentLoaded', setupDragAndDrop);
+    </script>
+</body>
+</html>

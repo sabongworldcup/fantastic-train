@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Art Heroes: Kai & Zephyr's Adventure!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .story-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            min-height: 100vh;
+            box-shadow: 0 0 30px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .episode-header {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .episode-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(255,255,255,0.1) 10px,
+                rgba(255,255,255,0.1) 20px
+            );
+            animation: stripes 3s linear infinite;
+        }
+
+        @keyframes stripes {
+            0% { transform: translateX(-20px); }
+            100% { transform: translateX(20px); }
+        }
+
+        .episode-title {
+            font-size: 28px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            margin-bottom: 10px;
+            z-index: 2;
+            position: relative;
+        }
+
+        .episode-subtitle {
+            font-size: 16px;
+            z-index: 2;
+            position: relative;
+        }
+
+        .power-meter {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.9);
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+
+        .power-item {
+            display: flex;
+            align-items: center;
+            margin: 8px 0;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .power-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+        }
+
+        .creativity-icon { background: #ff6b6b; }
+        .courage-icon { background: #4ecdc4; }
+        .teamwork-icon { background: #45b7d1; }
+
+        .scene-area {
+            padding: 20px;
+            min-height: 500px;
+            position: relative;
+        }
+
+        .comic-panel {
+            background: white;
+            border: 4px solid #333;
+            border-radius: 20px;
+            margin: 20px 0;
+            padding: 30px;
+            position: relative;
+            box-shadow: 5px 5px 0px #333;
+        }
+
+        .panel-number {
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: #ff6b6b;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .characters-scene {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 20px 0;
+            min-height: 200px;
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            border-radius: 15px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-character {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: white;
+            position: relative;
+            animation: float 3s ease-in-out infinite;
+            border: 4px solid white;
+            box-shadow: 0 0 20px rgba(255,255,255,0.5);
+        }
+
+        .hero-character.kai {
+            background: linear-gradient(45deg, #74b9ff, #0984e3);
+            animation-delay: 0s;
+        }
+
+        .hero-character.zephyr {
+            background: linear-gradient(45deg, #a29bfe, #6c5ce7);
+            animation-delay: 1s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .power-aura {
+            position: absolute;
+            width: 140px;
+            height: 140px;
+            border: 3px solid;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .kai .power-aura { border-color: rgba(116, 185, 255, 0.6); }
+        .zephyr .power-aura { border-color: rgba(162, 155, 254, 0.6); }
+
+        @keyframes pulse {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1.2); opacity: 0; }
+        }
+
+        .speech-bubble {
+            background: white;
+            border: 3px solid #333;
+            border-radius: 20px;
+            padding: 15px 20px;
+            margin: 15px 0;
+            position: relative;
+            font-size: 16px;
+            line-height: 1.4;
+            max-width: 80%;
+        }
+
+        .speech-bubble.kai {
+            border-color: #74b9ff;
+            background: #e3f2fd;
+            margin-left: 0;
+        }
+
+        .speech-bubble.zephyr {
+            border-color: #a29bfe;
+            background: #f3e5f5;
+            margin-left: auto;
+        }
+
+        .speech-bubble.narrator {
+            background: #fff3cd;
+            border-color: #ffc107;
+            text-align: center;
+            margin: 20px auto;
+            font-style: italic;
+            font-weight: bold;
+        }
+
+        .speech-bubble::before {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 30px;
+            width: 0;
+            height: 0;
+            border: 12px solid transparent;
+            border-top-color: inherit;
+        }
+
+        .speech-bubble.zephyr::before {
+            left: auto;
+            right: 30px;
+        }
+
+        .action-buttons {
+            background: #f8f9fa;
+            padding: 30px;
+            border-top: 4px solid #333;
+            text-align: center;
+        }
+
+        .action-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+            text-transform: uppercase;
+        }
+
+        .hero-choice {
+            display: inline-block;
+            margin: 10px;
+            padding: 15px 25px;
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .hero-choice:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .hero-choice.kai-power {
+            background: linear-gradient(45deg, #74b9ff, #0984e3);
+        }
+
+        .hero-choice.zephyr-power {
+            background: linear-gradient(45deg, #a29bfe, #6c5ce7);
+        }
+
+        .hero-choice.team-power {
+            background: linear-gradient(45deg, #00b894, #55a3ff);
+        }
+
+        .episode-progress {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: #333;
+            z-index: 1000;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+
+        .victory-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            flex-direction: column;
+        }
+
+        .victory-text {
+            font-size: 48px;
+            font-weight: bold;
+            color: #ff6b6b;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-30px); }
+            60% { transform: translateY(-15px); }
+        }
+
+        .sound-effects {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 36px;
+            font-weight: bold;
+            color: #ff6b6b;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 1500;
+        }
+
+        .sound-effects.show {
+            animation: soundEffect 1s ease-out;
+        }
+
+        @keyframes soundEffect {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(1.5); }
+        }
+    </style>
+</head>
+<body>
+    <div class="power-meter">
+        <div class="power-item">
+            <div class="power-icon creativity-icon">🎨</div>
+            <span>Creativity: <span id="creativityLevel">50</span></span>
+        </div>
+        <div class="power-item">
+            <div class="power-icon courage-icon">⚡</div>
+            <span>Courage: <span id="courageLevel">40</span></span>
+        </div>
+        <div class="power-item">
+            <div class="power-icon teamwork-icon">🤝</div>
+            <span>Teamwork: <span id="teamworkLevel">30</span></span>
+        </div>
+    </div>
+
+    <div class="victory-animation" id="victoryScreen">
+        <div class="victory-text">MISSION COMPLETE!</div>
+        <div style="margin-top: 20px; font-size: 18px;">Art Heroes save the day!</div>
+    </div>
+
+    <div class="sound-effects" id="soundEffects"></div>
+
+    <div class="story-container">
+        <div class="episode-header">
+            <h1 class="episode-title">🎨 ART HEROES 🎨</h1>
+            <p class="episode-subtitle">Episode 1: The Great Creativity Crisis!</p>
+        </div>
+
+        <div class="scene-area" id="sceneArea">
+            <!-- Story content will be inserted here -->
+        </div>
+
+        <div class="action-buttons" id="actionButtons" style="display: none;">
+            <div class="action-title">Choose Your Hero Power!</div>
+            <div id="choiceButtons">
+                <!-- Choice buttons will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <div class="episode-progress">
+        <div class="progress-fill" id="progressBar"></div>
+    </div>
+
+    <script>
+        class SuperheroStory {
+            constructor() {
+                this.currentScene = 0;
+                this.powers = {
+                    creativity: 50,
+                    courage: 40,
+                    teamwork: 30
+                };
+                this.setupEpisode();
+                this.renderScene();
+            }
+
+            setupEpisode() {
+                this.scenes = [
+                    {
+                        title: "The Crisis Begins!",
+                        content: [
+                            {
+                                type: "narrator",
+                                text: "🌟 In the colorful city of Artopia, something terrible has happened! The evil Gray Ghost has stolen all the colors from the Art Museum, turning everything dull and lifeless!"
+                            },
+                            {
+                                type: "narrator", 
+                                text: "📞 The Art Heroes' communicator buzzes with an emergency call..."
+                            }
+                        ],
+                        characters: ["kai", "zephyr"],
+                        choices: [
+                            {
+                                text: "🎨 Use Kai's Cloud Vision Power",
+                                type: "kai-power",
+                                effects: { creativity: +15, courage: +5 },
+                                next: 1
+                            },
+                            {
+                                text: "💙 Use Zephyr's Storm Strike Power", 
+                                type: "zephyr-power",
+                                effects: { courage: +15, creativity: +5 },
+                                next: 2
+                            },
+                            {
+                                text: "🤝 Combine Powers Together!",
+                                type: "team-power", 
+                                effects: { teamwork: +20, creativity: +10, courage: +10 },
+                                next: 3
+                            }
+                        ]
+                    },
+                    {
+                        title: "Kai's Vision Quest!",
+                        content: [
+                            {
+                                type: "kai",
+                                text: "I can see through the Gray Ghost's illusions! *eyes glow with soft blue light* The colors aren't gone... they're just hidden behind clouds of sadness!"
+                            },
+                            {
+                                type: "narrator",
+                                text: "✨ Kai's Cloud Vision reveals the truth - the Gray Ghost isn't evil, just lonely and forgot how to see beauty in the world!"
+                            },
+                            {
+                                type: "zephyr", 
+                                text: "Whoa, Library Kid! You're seeing something I missed. What's the plan?"
+                            }
+                        ],
+                        characters: ["kai", "zephyr"],
+                        choices: [
+                            {
+                                text: "🎨 Paint a friendship mural",
+                                type: "team-power",
+                                effects: { creativity: +20, teamwork: +15 },
+                                next: 4
+                            },
+                            {
+                                text: "☁️ Create cloud art to show beauty",
+                                type: "kai-power", 
+                                effects: { creativity: +25 },
+                                next: 5
+                            }
+                        ]
+                    },
+                    {
+                        title: "Zephyr's Bold Strike!",
+                        content: [
+                            {
+                                type: "zephyr",
+                                text: "Time for some serious street art action! *graffiti cans start glowing* Let's show this Gray Ghost what REAL color looks like!"
+                            },
+                            {
+                                type: "narrator",
+                                text: "⚡ Zephyr creates a massive rainbow graffiti that lights up the whole museum! The Gray Ghost stops in amazement!"
+                            },
+                            {
+                                type: "kai",
+                                text: "*whispers* Zephyr... I think ze's not trying to destroy art... ze's trying to create something too."
+                            }
+                        ],
+                        characters: ["kai", "zephyr"],
+                        choices: [
+                            {
+                                text: "🤝 Invite Gray Ghost to create together",
+                                type: "team-power",
+                                effects: { teamwork: +25, courage: +10 },
+                                next: 6
+                            },
+                            {
+                                text: "🎨 Show Gray Ghost gentle art",
+                                type: "kai-power",
+                                effects: { creativity: +15, teamwork: +10 },
+                                next: 7
+                            }
+                        ]
+                    },
+                    {
+                        title: "Ultimate Team Power!",
+                        content: [
+                            {
+                                type: "narrator",
+                                text: "💫 The Art Heroes combine their powers! Kai's gentle clouds merge with Zephyr's bold lightning to create the most beautiful storm ever seen!"
+                            },
+                            {
+                                type: "kai",
+                                text: "Together we're not just opposite... we're complete! *reaches out hand to Gray Ghost*"
+                            },
+                            {
+                                type: "zephyr",
+                                text: "Yeah! Art isn't about being perfect - it's about being REAL! Come on, Gray Ghost, show us your style!"
+                            },
+                            {
+                                type: "narrator",
+                                text: "🌈 The Gray Ghost's mask falls away, revealing a shy young artist who just wanted friends to create with!"
+                            }
+                        ],
+                        characters: ["kai", "zephyr"],
+                        choices: [
+                            {
+                                text: "🎉 Celebrate with an art party!",
+                                type: "victory",
+                                effects: { creativity: +30, courage: +20, teamwork: +30 },
+                                next: "ending"
+                            }
+                        ]
+                    }
+                ];
+            }
+
+            renderScene() {
+                const scene = this.scenes[this.currentScene];
+                const sceneArea = document.getElementById('sceneArea');
+                const actionButtons = document.getElementById('actionButtons');
+
+                // Update progress
+                const progress = ((this.currentScene + 1) / this.scenes.length) * 100;
+                document.getElementById('progressBar').style.width = `${progress}%`;
+
+                // Create scene content
+                let sceneHTML = `<div class="comic-panel">`;
+                sceneHTML += `<div class="panel-number">Scene ${this.currentScene + 1}</div>`;
+
+                // Add character scene
+                if (scene.characters) {
+                    sceneHTML += `<div class="characters-scene">`;
+                    scene.characters.forEach(char => {
+                        sceneHTML += `
+                            <div class="hero-character ${char}">
+                                <div class="power-aura"></div>
+                                ${char === 'kai' ? '🤍' : '💙'}
+                            </div>
+                        `;
+                    });
+                    sceneHTML += `</div>`;
+                }
+
+                // Add dialogue
+                scene.content.forEach(item => {
+                    sceneHTML += `<div class="speech-bubble ${item.type}">${item.text}</div>`;
+                });
+
+                sceneHTML += `</div>`;
+                sceneArea.innerHTML = sceneHTML;
+
+                // Show choices
+                if (scene.choices) {
+                    this.renderChoices(scene.choices);
+                    actionButtons.style.display = 'block';
+                } else {
+                    actionButtons.style.display = 'none';
+                }
+
+                this.updatePowerDisplay();
+            }
+
+            renderChoices(choices) {
+                const choiceButtons = document.getElementById('choiceButtons');
+                let choicesHTML = '';
+
+                choices.forEach((choice, index) => {
+                    choicesHTML += `
+                        <button class="hero-choice ${choice.type}" onclick="story.makeChoice(${index})">
+                            ${choice.text}
+                        </button>
+                    `;
+                });
+
+                choiceButtons.innerHTML = choicesHTML;
+            }
+
+            makeChoice(choiceIndex) {
+                const scene = this.scenes[this.currentScene];
+                const choice = scene.choices[choiceIndex];
+
+                // Show sound effect
+                this.showSoundEffect("POW!");
+
+                // Apply power effects
+                if (choice.effects) {
+                    Object.keys(choice.effects).forEach(power => {
+                        this.powers[power] = Math.min(100, this.powers[power] + choice.effects[power]);
+                    });
+                }
+
+                // Move to next scene
+                if (choice.next === "ending") {
+                    this.showVictory();
+                } else if (choice.next < this.scenes.length) {
+                    this.currentScene = choice.next;
+                    setTimeout(() => {
+                        this.renderScene();
+                        window.scrollTo(0, 0);
+                    }, 800);
+                }
+            }
+
+            updatePowerDisplay() {
+                document.getElementById('creativityLevel').textContent = this.powers.creativity;
+                document.getElementById('courageLevel').textContent = this.powers.courage;
+                document.getElementById('teamworkLevel').textContent = this.powers.teamwork;
+            }
+
+            showSoundEffect(text) {
+                const soundEffects = document.getElementById('soundEffects');
+                soundEffects.textContent = text;
+                soundEffects.classList.add('show');
+                setTimeout(() => {
+                    soundEffects.classList.remove('show');
+                }, 1000);
+            }
+
+            showVictory() {
+                const victoryScreen = document.getElementById('victoryScreen');
+                victoryScreen.style.display = 'flex';
+                
+                setTimeout(() => {
+                    victoryScreen.style.display = 'none';
+                    this.showEnding();
+                }, 3000);
+            }
+
+            showEnding() {
+                const sceneArea = document.getElementById('sceneArea');
+                const actionButtons = document.getElementById('actionButtons');
+
+                let endingMessage = "Great job, Art Heroes!";
+                if (this.powers.teamwork > 70) {
+                    endingMessage = "AMAZING! You've mastered the power of teamwork and friendship!";
+                } else if (this.powers.creativity > 80) {
+                    endingMessage = "INCREDIBLE! Your creativity saved the day!";
+                } else if (this.powers.courage > 80) {
+                    endingMessage = "WOW! Your courage inspired everyone!";
+                }
+
+                sceneArea.innerHTML = `
+                    <div class="comic-panel">
+                        <div class="panel-number">THE END</div>
+                        <div class="speech-bubble narrator">
+                            🎉 ${endingMessage} 🎉<br><br>
+                            The Art Museum is colorful again, and Gray Ghost has become the newest Art Hero!<br><br>
+                            Together, Kai and Zephyr learned that the most beautiful art comes from friendship and understanding.
+                        </div>
+                        <div style="text-align: center; margin-top: 20px;">
+                            <button class="hero-choice team-power" onclick="location.reload()">
+                                🌟 Play Again! 🌟
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                actionButtons.style.display = 'none';
+            }
+        }
+
+        // Initialize the superhero story
+        let story;
+        document.addEventListener('DOMContentLoaded', () => {
+            story = new SuperheroStory();
+        });
+    </script>
+</body>
+</html>

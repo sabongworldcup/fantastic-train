@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opposite Souls - Interactive Story</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .story-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .story-header {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .story-title {
+            font-size: 32px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .story-subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .chapter-indicator {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        .scene-container {
+            padding: 40px;
+            min-height: 60vh;
+        }
+
+        .scene-image {
+            width: 100%;
+            max-width: 600px;
+            height: 300px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            margin: 0 auto 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .characters-in-scene {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        .character-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: white;
+            position: relative;
+            animation: fadeIn 1s ease;
+        }
+
+        .kai-avatar {
+            background: linear-gradient(45deg, #a8cdf0, #6bb6ff);
+        }
+
+        .zephyr-avatar {
+            background: linear-gradient(45deg, #4776e6, #8e54e9);
+        }
+
+        .scene-text {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            line-height: 1.8;
+            font-size: 16px;
+        }
+
+        .dialogue {
+            margin: 20px 0;
+            padding: 15px 20px;
+            border-radius: 15px;
+            position: relative;
+        }
+
+        .dialogue.kai {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            color: #1565c0;
+        }
+
+        .dialogue.zephyr {
+            background: #f3e5f5;
+            border-left: 4px solid #9c27b0;
+            color: #7b1fa2;
+        }
+
+        .dialogue.narrator {
+            background: #f8f9fa;
+            border-left: 4px solid #6c757d;
+            color: #495057;
+            font-style: italic;
+        }
+
+        .speaker-name {
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .choices-container {
+            background: #f8f9fa;
+            padding: 30px;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .choices-title {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #495057;
+        }
+
+        .choice-button {
+            display: block;
+            width: 100%;
+            padding: 15px 20px;
+            margin: 10px 0;
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            font-size: 16px;
+            color: #495057;
+        }
+
+        .choice-button:hover {
+            border-color: #4ecdc4;
+            background: #4ecdc4;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(78, 205, 196, 0.3);
+        }
+
+        .continue-button {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 16px;
+            border-radius: 25px;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto;
+            transition: all 0.3s ease;
+        }
+
+        .continue-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .story-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: #4ecdc4;
+            transition: width 0.5s ease;
+            z-index: 1000;
+        }
+
+        .emotion-indicator {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0,0,0,0.1);
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            color: white;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .scene-text {
+            animation: slideIn 0.8s ease;
+        }
+
+        .typing-effect {
+            overflow: hidden;
+            white-space: nowrap;
+            animation: typing 3s steps(40, end);
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        .stats-panel {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.9);
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .stat-item {
+            margin: 5px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stat-bar {
+            width: 60px;
+            height: 6px;
+            background: #eee;
+            border-radius: 3px;
+            margin-left: 10px;
+        }
+
+        .stat-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        .friendship-bar { background: #4ecdc4; }
+        .confidence-bar { background: #ffd93d; }
+        .understanding-bar { background: #6c5ce7; }
+    </style>
+</head>
+<body>
+    <div class="story-progress" id="storyProgress"></div>
+    
+    <div class="stats-panel">
+        <div class="stat-item">
+            <span>Friendship</span>
+            <div class="stat-bar">
+                <div class="stat-fill friendship-bar" id="friendshipBar" style="width: 20%"></div>
+            </div>
+        </div>
+        <div class="stat-item">
+            <span>Confidence</span>
+            <div class="stat-bar">
+                <div class="stat-fill confidence-bar" id="confidenceBar" style="width: 30%"></div>
+            </div>
+        </div>
+        <div class="stat-item">
+            <span>Understanding</span>
+            <div class="stat-bar">
+                <div class="stat-fill understanding-bar" id="understandingBar" style="width: 25%"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="story-container">
+        <div class="story-header">
+            <div class="chapter-indicator" id="chapterIndicator">Chapter 1</div>
+            <h1 class="story-title">Opposite Souls</h1>
+            <p class="story-subtitle">An Interactive Story of Unexpected Friendship</p>
+        </div>
+
+        <div class="scene-container" id="sceneContainer">
+            <!-- Story content will be inserted here -->
+        </div>
+
+        <div class="choices-container" id="choicesContainer" style="display: none;">
+            <div class="choices-title">What happens next?</div>
+            <div id="choicesContent">
+                <!-- Choices will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class InteractiveStory {
+            constructor() {
+                this.currentScene = 0;
+                this.stats = {
+                    friendship: 20,
+                    confidence: 30,
+                    understanding: 25
+                };
+                this.choices = [];
+                this.setupStory();
+                this.renderScene();
+            }
+
+            setupStory() {
+                this.scenes = [
+                    {
+                        chapter: 1,
+                        title: "The Library Collision",
+                        image: "library",
+                        characters: ["kai"],
+                        content: [
+                            {
+                                type: "narrator",
+                                text: "The afternoon sun filtered through the tall library windows, casting dancing shadows across the quiet reading nooks. Kai sat in his favorite corner, silver hair catching the light as he carefully sketched cloud formations in his notebook."
+                            },
+                            {
+                                type: "narrator",
+                                text: "He preferred these quiet moments—just him, his art, and the peaceful silence that wrapped around him like a comfortable blanket."
+                            },
+                            {
+                                type: "narrator",
+                                text: "Then the library doors burst open with a sound like thunder..."
+                            }
+                        ],
+                        choices: [
+                            {
+                                text: "Look up to see who's making all the noise",
+                                effects: { confidence: +5 },
+                                next: 1
+                            },
+                            {
+                                text: "Try to hide deeper in the corner",
+                                effects: { confidence: -3 },
+                                next: 2
+                            }
+                        ]
+                    },
+                    {
+                        chapter: 1,
+                        title: "First Encounter - Brave",
+                        image: "library",
+                        characters: ["kai", "zephyr"],
+                        content: [
+                            {
+                                type: "narrator",
+                                text: "Kai looked up from his sketchbook, curiosity overcoming his usual shyness. In walked the most vibrant person he'd ever seen—electric blue hair spiked in every direction, dark sunglasses despite being indoors, and a jacket that looked like it had been painted by a street artist."
+                            },
+                            {
+                                type: "zephyr",
+                                speaker: "Zephyr",
+                                text: "Yo, where's the art section? This place is like a maze!"
+                            },
+                            {
+                                type: "narrator",
+                                text: "Every head turned. Every conversation stopped. The librarian looked horrified. But Kai found himself oddly fascinated rather than intimidated."
+                            }
+                        ],
+                        choices: [
+                            {
+                                text: "Point toward the art section and offer to help",
+                                effects: { friendship: +10, confidence: +8 },
+                                next: 3
+                            },
+                            {
+                                text: "Just point toward the art books quietly",
+                                effects: { friendship: +5, confidence: +2 },
+                                next: 4
+                            }
+                        ]
+                    },
+                    {
+                        chapter: 1,
+                        title: "First Encounter - Shy",
+                        image: "library",
+                        characters: ["kai", "zephyr"],
+                        content: [
+                            {
+                                type: "narrator",
+                                text: "Kai ducked his head lower, trying to disappear into his sketchbook. But fate had other plans. Heavy combat boots approached his table, chains clinking with each step."
+                            },
+                            {
+                                type: "zephyr",
+                                speaker: "Zephyr",
+                                text: "Hey, quiet kid. You look like you know this place. Art books?"
+                            },
+                            {
+                                type: "narrator",
+                                text: "Kai's cheeks flushed pink as he found himself face-to-face with the most intimidating person he'd ever seen. But there was something in their voice—not mean, just... direct."
+                            }
+                        ],
+                        choices: [
+                            {
+                                text: "Stammer out directions to the art section",
+                                effects: { friendship: +3, understanding: +5 },
+                                next: 5
+                            },
+                            {
+                                text: "Silently point toward the back of the library",
+                                effects: { friendship: +1 },
+                                next: 6
+                            }
+                        ]
+                    },
+                    {
+                        chapter: 1,
+                        title: "Helpful Connection",
+                        image: "library",
+                        characters: ["kai", "zephyr"],
+                        content: [
+                            {
+                                type: "kai",
+                                speaker: "Kai",
+                                text: "The art section is... um... third aisle from the back. I could... I could show you if you want?"
+                            },
+                            {
+                                type: "narrator",
+                                text: "Zephyr's intimidating expression softened into genuine surprise, then a warm smile that completely transformed their face."
+                            },
+                            {
+                                type: "zephyr",
+                                speaker: "Zephyr",
+                                text: "Really? That'd be awesome. I'm Zephyr, by the way. Ze/zir pronouns. And you are?"
+                            },
+                            {
+                                type: "kai",
+                                speaker: "Kai",
+                                text: "K-Kai... *stands up nervously* I was just... sketching. But I know where everything is here."
+                            },
+                            {
+                                type: "zephyr",
+                                speaker: "Zephyr",
+                                text: "You sketch? *eyes light up* No way! I'm looking for street art references. Maybe we can help each other out, Library Kid."
+                            }
+                        ],
+                        choices: [
+                            {
+                                text: "Show your cloud sketches to Zephyr",
+                                effects: { friendship: +15, confidence: +10, understanding: +8 },
+                                next: 7
+                            },
+                            {
+                                text: "Just lead the way to the art section",
+                                effects: { friendship: +8, confidence: +5 },
+                                next: 8
+                            }
+                        ]
+                    }
+                ];
+            }
+
+            renderScene() {
+                const scene = this.scenes[this.currentScene];
+                const container = document.getElementById('sceneContainer');
+                const choicesContainer = document.getElementById('choicesContainer');
+                
+                // Update chapter indicator
+                document.getElementById('chapterIndicator').textContent = `Chapter ${scene.chapter}`;
+                
+                // Update progress bar
+                const progress = (this.currentScene / (this.scenes.length - 1)) * 100;
+                document.getElementById('storyProgress').style.width = `${progress}%`;
+
+                // Render scene content
+                let contentHTML = `
+                    <div class="scene-image">
+                        <div class="characters-in-scene">
+                `;
+
+                scene.characters.forEach(char => {
+                    if (char === 'kai') {
+                        contentHTML += `<div class="character-avatar kai-avatar">🤍<div class="emotion-indicator">Nervous</div></div>`;
+                    } else if (char === 'zephyr') {
+                        contentHTML += `<div class="character-avatar zephyr-avatar">💙<div class="emotion-indicator">Confident</div></div>`;
+                    }
+                });
+
+                contentHTML += `
+                        </div>
+                    </div>
+                    <div class="scene-text">
+                `;
+
+                scene.content.forEach(item => {
+                    contentHTML += `
+                        <div class="dialogue ${item.type}">
+                            ${item.speaker ? `<div class="speaker-name">${item.speaker}</div>` : ''}
+                            <div>${item.text}</div>
+                        </div>
+                    `;
+                });
+
+                contentHTML += `</div>`;
+                container.innerHTML = contentHTML;
+
+                // Show choices
+                if (scene.choices && scene.choices.length > 0) {
+                    this.renderChoices(scene.choices);
+                    choicesContainer.style.display = 'block';
+                } else {
+                    choicesContainer.style.display = 'none';
+                }
+
+                // Update stats display
+                this.updateStatsDisplay();
+            }
+
+            renderChoices(choices) {
+                const choicesContent = document.getElementById('choicesContent');
+                let choicesHTML = '';
+
+                choices.forEach((choice, index) => {
+                    choicesHTML += `
+                        <button class="choice-button" onclick="story.makeChoice(${index})">
+                            ${choice.text}
+                        </button>
+                    `;
+                });
+
+                choicesContent.innerHTML = choicesHTML;
+            }
+
+            makeChoice(choiceIndex) {
+                const scene = this.scenes[this.currentScene];
+                const choice = scene.choices[choiceIndex];
+
+                // Apply effects
+                if (choice.effects) {
+                    Object.keys(choice.effects).forEach(stat => {
+                        this.stats[stat] = Math.max(0, Math.min(100, this.stats[stat] + choice.effects[stat]));
+                    });
+                }
+
+                // Move to next scene
+                if (choice.next !== undefined && choice.next < this.scenes.length) {
+                    this.currentScene = choice.next;
+                    setTimeout(() => {
+                        this.renderScene();
+                        window.scrollTo(0, 0);
+                    }, 300);
+                } else {
+                    // Story end
+                    this.showEnding();
+                }
+            }
+
+            updateStatsDisplay() {
+                document.getElementById('friendshipBar').style.width = `${this.stats.friendship}%`;
+                document.getElementById('confidenceBar').style.width = `${this.stats.confidence}%`;
+                document.getElementById('understandingBar').style.width = `${this.stats.understanding}%`;
+            }
+
+            showEnding() {
+                const container = document.getElementById('sceneContainer');
+                const choicesContainer = document.getElementById('choicesContainer');
+                
+                let endingText = "To be continued...";
+                
+                if (this.stats.friendship > 60) {
+                    endingText = "Kai and Zephyr have formed a strong bond that will last forever. Their opposite souls have found perfect harmony.";
+                } else if (this.stats.friendship > 30) {
+                    endingText = "A new friendship is budding between these unlikely companions. Only time will tell how deep their connection will grow.";
+                } else {
+                    endingText = "Though their paths crossed briefly, Kai and Zephyr still have much to learn about each other.";
+                }
+
+                container.innerHTML = `
+                    <div class="scene-text">
+                        <div class="dialogue narrator">
+                            <div style="text-align: center; font-size: 24px; font-weight: bold; margin-bottom: 20px;">
+                                The End (For Now...)
+                            </div>
+                            <div style="text-align: center; font-size: 18px; line-height: 1.6;">
+                                ${endingText}
+                            </div>
+                            <div style="text-align: center; margin-top: 30px;">
+                                <button class="continue-button" onclick="location.reload()">
+                                    Start Over
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                choicesContainer.style.display = 'none';
+            }
+        }
+
+        // Initialize the story
+        let story;
+        document.addEventListener('DOMContentLoaded', () => {
+            story = new InteractiveStory();
+        });
+    </script>
+</body>
+</html>

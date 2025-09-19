@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Chat - Kai & Zephyr</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .chat-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 800px;
+            height: 600px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            padding: 20px;
+            text-align: center;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .characters-panel {
+            display: flex;
+            padding: 20px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #eee;
+        }
+
+        .character-card {
+            flex: 1;
+            text-align: center;
+            padding: 15px;
+            margin: 0 10px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .character-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .character-card.active {
+            border-color: #4ecdc4;
+            background: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .character-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            background: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: white;
+        }
+
+        .kai-avatar {
+            background: linear-gradient(45deg, #a8cdf0, #6bb6ff);
+        }
+
+        .zephyr-avatar {
+            background: linear-gradient(45deg, #4776e6, #8e54e9);
+        }
+
+        .character-name {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .character-status {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .chat-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            animation: slideIn 0.3s ease;
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            position: relative;
+        }
+
+        .user .message-content {
+            background: #4ecdc4;
+            color: white;
+        }
+
+        .kai .message-content {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .zephyr .message-content {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+
+        .message-text {
+            margin-bottom: 5px;
+        }
+
+        .message-actions {
+            font-size: 11px;
+            opacity: 0.7;
+            font-style: italic;
+        }
+
+        .input-area {
+            padding: 20px;
+            background: #f8f9fa;
+            border-top: 1px solid #eee;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .mode-selector {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .mode-btn {
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            background: white;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .mode-btn.active {
+            background: #4ecdc4;
+            color: white;
+            border-color: #4ecdc4;
+        }
+
+        .message-input {
+            flex: 1;
+            padding: 12px 20px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .message-input:focus {
+            border-color: #4ecdc4;
+        }
+
+        .send-btn {
+            padding: 12px 24px;
+            background: #4ecdc4;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .send-btn:hover {
+            background: #44a08d;
+            transform: translateY(-1px);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .typing-indicator {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background: #f0f0f0;
+            border-radius: 18px;
+            margin-left: 52px;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 3px;
+        }
+
+        .typing-dots span {
+            width: 6px;
+            height: 6px;
+            background: #999;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+                opacity: 0.5;
+            }
+            30% {
+                transform: translateY(-10px);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="header">
+            <h1>🎭 Character Chat</h1>
+            <p>Talk with Kai & Zephyr - Your AI Story Characters</p>
+        </div>
+
+        <div class="characters-panel">
+            <div class="character-card" data-character="kai">
+                <div class="character-avatar kai-avatar">🤍</div>
+                <div class="character-name">Kai</div>
+                <div class="character-status">Shy Artist</div>
+            </div>
+            <div class="character-card" data-character="zephyr">
+                <div class="character-avatar zephyr-avatar">💙</div>
+                <div class="character-name">Zephyr</div>
+                <div class="character-status">Bold Creator</div>
+            </div>
+        </div>
+
+        <div class="chat-area" id="chatArea">
+            <div class="message kai">
+                <div class="message-avatar kai-avatar">🤍</div>
+                <div class="message-content">
+                    <div class="message-text">*looks up from sketchbook nervously* Oh, hello there... Welcome to our chat space.</div>
+                    <div class="message-actions">*fidgets with pencil*</div>
+                </div>
+            </div>
+            <div class="message zephyr">
+                <div class="message-avatar zephyr-avatar">💙</div>
+                <div class="message-content">
+                    <div class="message-text">Yo! *slides sunglasses down* Ready to chat with some real characters?</div>
+                    <div class="message-actions">*grins confidently*</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="typing-indicator" id="typingIndicator">
+            <div class="typing-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <span id="typingText">Kai is typing...</span>
+        </div>
+
+        <div class="input-area">
+            <div class="mode-selector">
+                <div class="mode-btn active" data-mode="both">Both</div>
+                <div class="mode-btn" data-mode="kai">Kai Only</div>
+                <div class="mode-btn" data-mode="zephyr">Zephyr Only</div>
+            </div>
+            <div class="input-container">
+                <input type="text" class="message-input" id="messageInput" placeholder="Type your message..." maxlength="500">
+                <button class="send-btn" id="sendBtn">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class VisualCharacterChat {
+            constructor() {
+                this.currentMode = 'both';
+                this.chatArea = document.getElementById('chatArea');
+                this.messageInput = document.getElementById('messageInput');
+                this.sendBtn = document.getElementById('sendBtn');
+                this.typingIndicator = document.getElementById('typingIndicator');
+                this.typingText = document.getElementById('typingText');
+                
+                this.setupEventListeners();
+                this.setupCharacterResponses();
+            }
+
+            setupEventListeners() {
+                // Mode selection
+                document.querySelectorAll('.mode-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+                        e.target.classList.add('active');
+                        this.currentMode = e.target.dataset.mode;
+                    });
+                });
+
+                // Character cards
+                document.querySelectorAll('.character-card').forEach(card => {
+                    card.addEventListener('click', (e) => {
+                        const character = e.currentTarget.dataset.character;
+                        document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+                        document.querySelector(`[data-mode="${character}"]`).classList.add('active');
+                        this.currentMode = character;
+                    });
+                });
+
+                // Send message
+                this.sendBtn.addEventListener('click', () => this.sendMessage());
+                this.messageInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') this.sendMessage();
+                });
+            }
+
+            setupCharacterResponses() {
+                this.kaiResponses = {
+                    greetings: [
+                        "*looks up from sketchbook* Oh, h-hello there...",
+                        "*smiles shyly* Hi... nice to meet you.",
+                        "*blushes slightly* Hello... I was just drawing some clouds..."
+                    ],
+                    art: [
+                        "*eyes light up* Oh! You like art too? I love capturing quiet moments...",
+                        "*shows sketchbook nervously* I'm always sketching... mostly peaceful scenes.",
+                        "*gets animated* Art is like capturing feelings that words can't express!"
+                    ],
+                    emotions: [
+                        "*speaks softly* I understand... quiet spaces help when feelings get overwhelming.",
+                        "*nods gently* It's okay to feel things deeply. That's what makes us human.",
+                        "*offers small smile* Want to sit somewhere quiet and talk about it?"
+                    ],
+                    general: [
+                        "*tilts head thoughtfully* That's interesting... tell me more?",
+                        "*speaks softly* You have a unique perspective on things.",
+                        "*gentle smile* What made you think about that?"
+                    ]
+                };
+
+                this.zephyrResponses = {
+                    greetings: [
+                        "*slides sunglasses down* Yo! What's up?",
+                        "*grins* Hey there! Like the vibe, whoever you are.",
+                        "*confident smile* Well hello there. I'm Zephyr, ze/zir pronouns."
+                    ],
+                    art: [
+                        "*gets excited* Now we're talking! Street art life, bold colors, bigger statements!",
+                        "*pulls out sketchbook* I don't do 'pretty.' I do 'powerful.'",
+                        "Art should make people FEEL something, not just sit there looking nice!"
+                    ],
+                    emotions: [
+                        "*removes sunglasses slowly* You really want to know? Most people can't handle the real me.",
+                        "*voice softer* Yeah... I feel things. Just hide it better than most.",
+                        "*vulnerable moment* Sometimes I get tired of being 'on' all the time..."
+                    ],
+                    general: [
+                        "*leans forward* Huh. That's actually pretty deep.",
+                        "*nods approvingly* I can respect that perspective.",
+                        "*grins* Now you're speaking my language!"
+                    ]
+                };
+            }
+
+            getResponse(character, message) {
+                const responses = character === 'kai' ? this.kaiResponses : this.zephyrResponses;
+                const msg = message.toLowerCase();
+
+                if (msg.includes('hello') || msg.includes('hi') || msg.includes('hey')) {
+                    return this.randomChoice(responses.greetings);
+                } else if (msg.includes('art') || msg.includes('draw') || msg.includes('paint')) {
+                    return this.randomChoice(responses.art);
+                } else if (msg.includes('feel') || msg.includes('sad') || msg.includes('happy') || msg.includes('emotion')) {
+                    return this.randomChoice(responses.emotions);
+                } else {
+                    return this.randomChoice(responses.general);
+                }
+            }
+
+            randomChoice(array) {
+                return array[Math.floor(Math.random() * array.length)];
+            }
+
+            sendMessage() {
+                const message = this.messageInput.value.trim();
+                if (!message) return;
+
+                // Add user message
+                this.addMessage('user', message, '💬');
+
+                // Clear input
+                this.messageInput.value = '';
+
+                // Show typing and respond
+                this.showTyping();
+                setTimeout(() => this.respondToMessage(message), 1500);
+            }
+
+            addMessage(type, text, avatar) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${type}`;
+                
+                const parts = text.split('*');
+                const mainText = parts[0].trim();
+                const action = parts.length > 1 ? `*${parts.slice(1).join('*').trim()}` : '';
+
+                messageDiv.innerHTML = `
+                    <div class="message-avatar ${type}-avatar">${avatar}</div>
+                    <div class="message-content">
+                        <div class="message-text">${mainText}</div>
+                        ${action ? `<div class="message-actions">${action}</div>` : ''}
+                    </div>
+                `;
+
+                this.chatArea.appendChild(messageDiv);
+                this.chatArea.scrollTop = this.chatArea.scrollHeight;
+            }
+
+            showTyping() {
+                const characters = this.currentMode === 'both' ? ['Kai', 'Zephyr'] : [this.currentMode === 'kai' ? 'Kai' : 'Zephyr'];
+                this.typingText.textContent = `${characters.join(' & ')} ${characters.length > 1 ? 'are' : 'is'} typing...`;
+                this.typingIndicator.style.display = 'flex';
+            }
+
+            hideTyping() {
+                this.typingIndicator.style.display = 'none';
+            }
+
+            respondToMessage(message) {
+                this.hideTyping();
+
+                if (this.currentMode === 'both') {
+                    // Kai responds first
+                    setTimeout(() => {
+                        const kaiResponse = this.getResponse('kai', message);
+                        this.addMessage('kai', kaiResponse, '🤍');
+                    }, 300);
+
+                    // Zephyr responds second
+                    setTimeout(() => {
+                        const zephyrResponse = this.getResponse('zephyr', message);
+                        this.addMessage('zephyr', zephyrResponse, '💙');
+                    }, 1200);
+
+                } else if (this.currentMode === 'kai') {
+                    const kaiResponse = this.getResponse('kai', message);
+                    this.addMessage('kai', kaiResponse, '🤍');
+
+                } else if (this.currentMode === 'zephyr') {
+                    const zephyrResponse = this.getResponse('zephyr', message);
+                    this.addMessage('zephyr', zephyrResponse, '💙');
+                }
+            }
+        }
+
+        // Initialize the chat when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new VisualCharacterChat();
+        });
+    </script>
+</body>
+</html>

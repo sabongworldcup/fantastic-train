@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Builder Studio - Advanced Website Builder Assistant</title>
+    <link rel="stylesheet" href="GkeDeployer/static/ai-chat-enhanced.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Animated Background -->
+    <div id="animated-bg"></div>
+    
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-robot"></i>
+                <span>AI Builder Studio</span>
+            </div>
+            
+            <div class="nav-menu">
+                <a href="#home" class="nav-link active">🏠 Home</a>
+                <a href="#builder" class="nav-link">🛠️ Builder</a>
+                <a href="#templates" class="nav-link">📋 Templates</a>
+                <a href="#ai-tools" class="nav-link">🤖 AI Tools</a>
+                <a href="#gallery" class="nav-link">🎨 Gallery</a>
+                <a href="#pricing" class="nav-link">💎 Premium</a>
+            </div>
+            
+            <div class="nav-actions">
+                <button class="btn-secondary">Login</button>
+                <button class="btn-primary">Get Started</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span>🔥 NEW</span> Advanced AI Website Builder
+            </div>
+            <h1 class="hero-title">
+                Build Stunning Websites with
+                <span class="gradient-text">AI Assistance</span>
+            </h1>
+            <p class="hero-description">
+                Create professional websites in minutes using our advanced AI builder assistant. 
+                No coding required - just describe your vision and watch it come to life.
+            </p>
+            
+            <div class="hero-actions">
+                <button class="btn-hero-primary" onclick="startAIBuilder()">
+                    <i class="fas fa-magic"></i>
+                    Start Building Now
+                </button>
+                <button class="btn-hero-secondary" onclick="watchDemo()">
+                    <i class="fas fa-play"></i>
+                    Watch Demo
+                </button>
+            </div>
+            
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-number">50K+</span>
+                    <span class="stat-label">Websites Built</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">4.9★</span>
+                    <span class="stat-label">User Rating</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">24/7</span>
+                    <span class="stat-label">AI Support</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="hero-visual">
+            <div class="preview-container">
+                <div class="preview-screen" id="live-preview">
+                    <div class="preview-loading">
+                        <div class="loading-spinner"></div>
+                        <span>AI Building Your Website...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Builder Interface -->
+    <section id="builder" class="builder-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>🤖 AI Builder Assistant</h2>
+                <p>Describe your website and let AI create it for you</p>
+            </div>
+            
+            <div class="builder-interface">
+                <div class="ai-chat-panel">
+                    <div class="chat-header">
+                        <div class="ai-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="ai-info">
+                            <h3>AI Assistant</h3>
+                            <span class="status online">Online</span>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-messages" id="chat-messages">
+                        <div class="message ai-message">
+                            <div class="message-content">
+                                <p>Hi! I'm your AI website builder assistant. What kind of website would you like to create today?</p>
+                                <div class="quick-suggestions">
+                                    <button class="suggestion-btn" onclick="selectSuggestion('portfolio')">Portfolio</button>
+                                    <button class="suggestion-btn" onclick="selectSuggestion('business')">Business</button>
+                                    <button class="suggestion-btn" onclick="selectSuggestion('blog')">Blog</button>
+                                    <button class="suggestion-btn" onclick="selectSuggestion('ecommerce')">E-commerce</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-input-container">
+                        <div class="input-group">
+                            <input type="text" id="ai-input" placeholder="Describe your website idea..." class="ai-input">
+                            <button class="btn-send" onclick="sendMessage()">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                        <div class="input-features">
+                            <button class="feature-btn" onclick="toggleVoiceInput()">
+                                <i class="fas fa-microphone"></i>
+                            </button>
+                            <button class="feature-btn" onclick="uploadImage()">
+                                <i class="fas fa-image"></i>
+                            </button>
+                            <button class="feature-btn" onclick="generateIdea()">
+                                <i class="fas fa-lightbulb"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="builder-controls">
+                    <div class="control-tabs">
+                        <button class="tab-btn active" onclick="switchTab('design')">
+                            <i class="fas fa-palette"></i> Design
+                        </button>
+                        <button class="tab-btn" onclick="switchTab('content')">
+                            <i class="fas fa-edit"></i> Content
+                        </button>
+                        <button class="tab-btn" onclick="switchTab('features')">
+                            <i class="fas fa-cogs"></i> Features
+                        </button>
+                        <button class="tab-btn" onclick="switchTab('export')">
+                            <i class="fas fa-download"></i> Export
+                        </button>
+                    </div>
+                    
+                    <div class="tab-content" id="design-tab">
+                        <h3>Design Controls</h3>
+                        <div class="control-group">
+                            <label>Color Scheme</label>
+                            <div class="color-presets">
+                                <div class="color-preset dark" onclick="applyColorScheme('dark')">
+                                    <div class="color-preview"></div>
+                                    <span>Dark</span>
+                                </div>
+                                <div class="color-preset light" onclick="applyColorScheme('light')">
+                                    <div class="color-preview"></div>
+                                    <span>Light</span>
+                                </div>
+                                <div class="color-preset colorful" onclick="applyColorScheme('colorful')">
+                                    <div class="color-preview"></div>
+                                    <span>Colorful</span>
+                                </div>
+                                <div class="color-preset minimal" onclick="applyColorScheme('minimal')">
+                                    <div class="color-preview"></div>
+                                    <span>Minimal</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="control-group">
+                            <label>Layout Style</label>
+                            <select class="control-select" onchange="changeLayout(this.value)">
+                                <option value="modern">Modern</option>
+                                <option value="classic">Classic</option>
+                                <option value="minimal">Minimal</option>
+                                <option value="creative">Creative</option>
+                            </select>
+                        </div>
+                        
+                        <div class="control-group">
+                            <label>Background Style</label>
+                            <div class="bg-options">
+                                <button class="bg-option" onclick="setBgType('solid')">Solid</button>
+                                <button class="bg-option active" onclick="setBgType('gradient')">Gradient</button>
+                                <button class="bg-option" onclick="setBgType('animated')">Animated</button>
+                                <button class="bg-option" onclick="setBgType('video')">Video</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Template Gallery -->
+    <section id="templates" class="templates-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>🎨 AI-Generated Templates</h2>
+                <p>Choose from thousands of AI-created templates</p>
+            </div>
+            
+            <div class="template-filters">
+                <div class="filter-group">
+                    <h4>Categories</h4>
+                    <div class="filter-tags">
+                        <button class="filter-tag active" onclick="filterTemplates('all')">All</button>
+                        <button class="filter-tag" onclick="filterTemplates('business')">Business</button>
+                        <button class="filter-tag" onclick="filterTemplates('portfolio')">Portfolio</button>
+                        <button class="filter-tag" onclick="filterTemplates('blog')">Blog</button>
+                        <button class="filter-tag" onclick="filterTemplates('ecommerce')">E-commerce</button>
+                        <button class="filter-tag" onclick="filterTemplates('landing')">Landing Page</button>
+                    </div>
+                </div>
+                
+                <div class="filter-group">
+                    <h4>Style</h4>
+                    <div class="filter-tags">
+                        <button class="filter-tag" onclick="filterByStyle('modern')">Modern</button>
+                        <button class="filter-tag" onclick="filterByStyle('minimal')">Minimal</button>
+                        <button class="filter-tag" onclick="filterByStyle('creative')">Creative</button>
+                        <button class="filter-tag" onclick="filterByStyle('corporate')">Corporate</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="templates-grid" id="templates-grid">
+                <!-- Templates will be loaded dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Tools Section -->
+    <section id="ai-tools" class="ai-tools-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>🤖 Advanced AI Tools</h2>
+                <p>Powerful AI tools to enhance your website building experience</p>
+            </div>
+            
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-pen-fancy"></i>
+                    </div>
+                    <h3>AI Content Writer</h3>
+                    <p>Generate compelling content for your website using advanced AI</p>
+                    <button class="btn-tool" onclick="openTool('content-writer')">Try Now</button>
+                </div>
+                
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-image"></i>
+                    </div>
+                    <h3>Image Generator</h3>
+                    <p>Create stunning images and graphics with AI</p>
+                    <button class="btn-tool" onclick="openTool('image-generator')">Generate</button>
+                </div>
+                
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3>Code Assistant</h3>
+                    <p>Get help with custom code and advanced features</p>
+                    <button class="btn-tool" onclick="openTool('code-assistant')">Code</button>
+                </div>
+                
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3>SEO Optimizer</h3>
+                    <p>Optimize your website for search engines automatically</p>
+                    <button class="btn-tool" onclick="openTool('seo-optimizer')">Optimize</button>
+                </div>
+                
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Responsive Designer</h3>
+                    <p>Ensure perfect mobile experience with AI assistance</p>
+                    <button class="btn-tool" onclick="openTool('responsive-designer')">Design</button>
+                </div>
+                
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Analytics Setup</h3>
+                    <p>Automatically configure analytics and tracking</p>
+                    <button class="btn-tool" onclick="openTool('analytics-setup')">Setup</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-brand">
+                        <i class="fas fa-robot"></i>
+                        <span>AI Builder Studio</span>
+                    </div>
+                    <p>Create stunning websites with the power of AI. No coding required.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Product</h4>
+                    <ul>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#templates">Templates</a></li>
+                        <li><a href="#pricing">Pricing</a></li>
+                        <li><a href="#api">API</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#blog">Blog</a></li>
+                        <li><a href="#tutorials">Tutorials</a></li>
+                        <li><a href="#help">Help Center</a></li>
+                        <li><a href="#community">Community</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#careers">Careers</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                        <li><a href="#privacy">Privacy</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 AI Builder Studio. All rights reserved. | Built with AI ❤️</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- AI Tool Modals -->
+    <div id="tool-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">AI Tool</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <!-- Tool content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="GkeDeployer/static/ai-builder-script.js"></script>
+</body>
+</html>

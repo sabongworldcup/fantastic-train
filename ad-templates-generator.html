@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>50 High-Converting Ad Templates Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .template-card { transition: all 0.3s ease; }
+        .template-card:hover { transform: translateY(-2px); }
+        .copy-success { animation: fadeInOut 2s ease-in-out; }
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0; transform: translateY(-10px); }
+            10%, 90% { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-gray-800 mb-4">🚀 50 High-Converting Ad Templates</h1>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">Professional ad templates that convert. Simply customize the bracketed words with your details and watch your campaigns perform!</p>
+        </div>
+
+        <div class="flex flex-wrap justify-center gap-3 mb-8">
+            <button onclick="filterCategory(this, 'all')" class="category-btn bg-indigo-600 text-white px-6 py-2 rounded-full font-medium hover:bg-indigo-700 transition-colors">All Templates</button>
+            <button onclick="filterCategory(this, 'tech')" class="category-btn bg-white text-gray-700 px-6 py-2 rounded-full font-medium hover:bg-gray-50 transition-colors border">Tech & Software</button>
+            <button onclick="filterCategory(this, 'business')" class="category-btn bg-white text-gray-700 px-6 py-2 rounded-full font-medium hover:bg-gray-50 transition-colors border">Business & Finance</button>
+            <button onclick="filterCategory(this, 'fintech')" class="category-btn bg-white text-gray-700 px-6 py-2 rounded-full font-medium hover:bg-gray-50 transition-colors border">Fintech & Crypto</button>
+            <button onclick="filterCategory(this, 'health')" class="category-btn bg-white text-gray-700 px-6 py-2 rounded-full font-medium hover:bg-gray-50 transition-colors border">Health & Fitness</button>
+            <button onclick="filterCategory(this, 'education')" class="category-btn bg-white text-gray-700 px-6 py-2 rounded-full font-medium hover:bg-gray-50 transition-colors border">Education</button>
+            <button onclick="filterCategory(this, 'ecommerce')" class="category-btn bg-white text-gray-700 px-6 py-2 rounded-full font-medium hover:bg-gray-50 transition-colors border">E-commerce & Retail</button>
+            <button onclick="filterCategory(this, 'gaming')" class="category-btn bg-white text-gray-700 px-6 py-2 rounded-full font-medium hover:bg-gray-50 transition-colors border">Gaming & Entertainment</button>
+            <button onclick="filterCategory(this, 'luxury')" class="category-btn bg-white text-gray-700 px-6 py-2 rounded-full font-medium hover:bg-gray-50 transition-colors border">Luxury & Premium</button>
+            <button onclick="filterCategory(this, 'creative')" class="category-btn bg-white text-gray-700 px-6 py-2 rounded-full font-medium hover:bg-gray-50 transition-colors border">Creative & Design</button>
+            <button onclick="filterCategory(this, 'lifestyle')" class="category-btn bg-white text-gray-700 px-6 py-2 rounded-full font-medium hover:bg-gray-50 transition-colors border">Lifestyle & Home</button>
+        </div>
+
+        <div id="templatesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        </div>
+
+        <div id="templateModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 p-4">
+            <div class="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                <div class="p-6">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 id="modalTitle" class="text-2xl font-bold text-gray-800"></h3>
+                        <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Headline:</label>
+                            <textarea id="modalHeadline" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" rows="2"></textarea>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Body:</label>
+                            <textarea id="modalBody" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" rows="4"></textarea>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Call-to-Action:</label>
+                            <input type="text" id="modalCTA" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                        </div>
+                        
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <p class="text-sm text-blue-800"><strong>Best for:</strong> <span id="modalBestFor"></span></p>
+                        </div>
+                        
+                        <div class="flex gap-3">
+                            <button onclick="copyTemplate()" class="flex-1 bg-indigo-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-indigo-700 transition-colors">📋 Copy Template</button>
+                            <button onclick="resetTemplate()" class="bg-gray-200 text-gray-700 py-3 px-6 rounded-lg font-medium hover:bg-gray-300 transition-colors">🔄 Reset</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="copySuccess" class="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg hidden copy-success">
+            ✅ Template copied to clipboard!
+        </div>
+    </div>
+
+    <script>
+        const templates = [
+            // Tech & Software
+            { id: 1, category: 'tech', title: 'SaaS Product Launch', headline: 'Stop [PAIN POINT] Forever - [PRODUCT NAME] Does It All', body: 'Tired of [SPECIFIC PROBLEM]? [PRODUCT NAME] automates [SOLUTION] in under 30 seconds. Join 10,000+ businesses already saving [TIME/MONEY].', cta: 'Start Free Trial - No Credit Card Required', bestFor: 'Software launches, app promotions, B2B tools' },
+            { id: 2, category: 'tech', title: 'AI Tool Promotion', headline: 'AI That Actually Works - [TOOL NAME] Results in 24 Hours', body: 'While others promise, we deliver. [TOOL NAME] uses advanced AI to [SPECIFIC BENEFIT]. See real results, not just demos.', cta: 'Get Started Free Today', bestFor: 'AI software, automation tools, productivity apps' },
+            { id: 3, category: 'tech', title: 'Mobile App Download', headline: '[NUMBER] Minutes to [DESIRED OUTCOME] - Download [APP NAME]', body: 'The app that\'s changing how people [ACTIVITY]. Simple, fast, effective. Over [NUMBER] downloads and counting.', cta: 'Download Free Now', bestFor: 'Mobile apps, games, utility apps' },
+            { id: 4, category: 'tech', title: 'Course Platform Promotion', headline: 'Learn [SKILL] Like a Pro - Even If You\'re a Complete Beginner', body: 'Our step-by-step system has helped [NUMBER] students master [SKILL] in just [TIMEFRAME]. Real skills, real results.', cta: 'Enroll Today - Limited Time Offer', bestFor: 'Online courses, educational platforms, skill training' },
+            { id: 5, category: 'tech', title: 'Productivity Tool', headline: 'Get [TIME] Back Every Day - [TOOL NAME] Handles the Rest', body: 'Stop wasting time on [MUNDANE TASKS]. [TOOL NAME] automates your workflow so you can focus on what matters most.', cta: 'Try Free for 30 Days', bestFor: 'Project management, time tracking, workflow automation' },
+
+            // Business & Finance
+            { id: 6, category: 'business', title: 'Business Consulting', headline: 'From [CURRENT STATE] to [DESIRED STATE] in [TIMEFRAME]', body: 'We\'ve helped [NUMBER] businesses [SPECIFIC ACHIEVEMENT]. Our proven system works even if you\'ve tried everything else.', cta: 'Book Free Strategy Call', bestFor: 'Business consulting, coaching services, growth agencies' },
+            { id: 7, category: 'business', title: 'Financial Services', headline: 'Save $[AMOUNT] This Year - [SERVICE NAME] Shows You How', body: 'Smart money management shouldn\'t be complicated. Our [SERVICE TYPE] helps you [SPECIFIC BENEFIT] without the stress.', cta: 'Get Free Financial Review', bestFor: 'Financial advisors, investment platforms, budgeting tools' },
+            { id: 8, category: 'business', title: 'Marketing Agency', headline: '[PERCENTAGE]% More Customers in [TIMEFRAME] - Guaranteed', body: 'Your competitors are getting all the customers. We change that with proven [SERVICE TYPE] strategies that actually work.', cta: 'Claim Free Marketing Audit', bestFor: 'Digital marketing, SEO services, advertising agencies' },
+
+            // Health & Fitness
+            { id: 9, category: 'health', title: 'Fitness Program', headline: '[RESULT] in [TIMEFRAME] - No Gym Required', body: 'Transform your body from home with our proven [PROGRAM TYPE]. Real people, real results. Join thousands who\'ve already succeeded.', cta: 'Start Your Transformation', bestFor: 'Home workouts, fitness apps, personal training' },
+            { id: 10, category: 'health', title: 'Health Supplement', headline: 'Feel [BENEFIT] Every Morning - Natural [PRODUCT TYPE]', body: 'Stop settling for tired afternoons and restless nights. [PRODUCT NAME] gives you the energy and vitality you deserve.', cta: 'Try Risk-Free for 60 Days', bestFor: 'Supplements, health products, wellness brands' },
+
+            // Education
+            { id: 11, category: 'education', title: 'Online Course', headline: 'Master [SKILL] in [TIMEFRAME] - Even If You\'re Starting from Zero', body: 'Our step-by-step program takes you from beginner to [ADVANCED LEVEL]. Join [NUMBER] successful students.', cta: 'Enroll Now - Early Bird Pricing', bestFor: 'Educational courses, skill development, professional training' },
+            { id: 12, category: 'education', title: 'Language Learning', headline: 'Speak [LANGUAGE] Fluently in [TIMEFRAME] - Guaranteed', body: 'Our immersive method makes learning [LANGUAGE] natural and fun. Start conversations from day one.', cta: 'Try First Lesson Free', bestFor: 'Language apps, tutoring services, educational platforms' },
+
+            // E-commerce & Retail
+            { id: 13, category: 'ecommerce', title: 'Premium Product Launch', headline: 'Finally, [PRODUCT TYPE] That Actually [BENEFIT]', body: 'After [TIME] of development, we\'ve created the [PRODUCT] that solves [PROBLEM] once and for all. Limited initial batch available.', cta: 'Reserve Yours Now', bestFor: 'Product launches, premium goods, limited editions' },
+            { id: 14, category: 'ecommerce', title: 'Flash Sale Template', headline: '[PERCENTAGE]% Off [PRODUCT] - [TIME] Left!', body: 'This deal won\'t last. Save $[AMOUNT] on [PRODUCT] but only until [DEADLINE]. No rain checks, no extensions.', cta: 'Claim Discount Now', bestFor: 'Sales events, clearance, limited-time offers' },
+
+            // Fintech & Crypto
+            { id: 15, category: 'fintech', title: 'Crypto Trading Platform', headline: 'Trade Crypto Like a Pro - Even as a Complete Beginner', body: 'No confusing charts. No technical jargon. Just simple, profitable crypto trading with built-in safety features.', cta: 'Start Trading Free', bestFor: 'Crypto exchanges, trading apps, investment platforms' },
+            { id: 16, category: 'fintech', title: 'DeFi Service', headline: 'Earn [PERCENTAGE]% APY While You Sleep - DeFi Made Simple', body: 'Traditional banks pay 0.1%. We pay [PERCENTAGE]% with blockchain technology. Your money works harder for you.', cta: 'Start Earning Today', bestFor: 'DeFi platforms, yield farming, staking services' },
+
+            // Gaming & Entertainment
+            { id: 17, category: 'gaming', title: 'Mobile Game', headline: 'Addictive? Yes. Worth It? Absolutely. Download [GAME NAME]', body: 'The game everyone\'s talking about. Simple to learn, impossible to master. Join [NUMBER] players already obsessed.', cta: 'Download Free Now', bestFor: 'Mobile games, gaming apps, entertainment platforms' },
+            { id: 18, category: 'gaming', title: 'Streaming Service', headline: 'Binge [CONTENT TYPE] Others Can\'t Find Anywhere Else', body: 'Exclusive [CONTENT]. No ads. Unlimited streaming. The shows and movies you actually want to watch.', cta: 'Start Free Trial', bestFor: 'Streaming platforms, content services, entertainment apps' },
+
+            // Luxury & Premium
+            { id: 19, category: 'luxury', title: 'Luxury Travel', headline: 'Travel Like the 1% - Pay Like the 99%', body: 'Exclusive destinations. Five-star treatment. Insider access. Experience luxury travel without the luxury price tag.', cta: 'Book Exclusive Trip', bestFor: 'Travel agencies, luxury experiences, vacation packages' },
+            { id: 20, category: 'luxury', title: 'High-End Fashion', headline: 'Runway Fashion, Real-World Prices - [BRAND NAME]', body: 'Designer quality without designer markup. [BRAND] brings high fashion to real people with real budgets.', cta: 'Shop Collection Now', bestFor: 'Fashion brands, luxury goods, designer alternatives' },
+
+            // Creative & Design
+            { id: 21, category: 'creative', title: 'Design Services', headline: 'Design That Converts - Not Just Pretty Pictures', body: 'Beautiful design that doesn\'t sell is just expensive art. Our designs increase [METRIC] by [PERCENTAGE] on average.', cta: 'Get Design Quote', bestFor: 'Design agencies, creative services, branding' },
+            { id: 22, category: 'creative', title: 'Photography Services', headline: 'Photos That Make You Look [DESIRED OUTCOME]', body: 'Average photos get average results. Our [PHOTOGRAPHY TYPE] captures the real you - confident, professional, unforgettable.', cta: 'Book Photo Session', bestFor: 'Photography services, portrait studios, event photography' },
+
+            // Lifestyle & Home
+            { id: 23, category: 'lifestyle', title: 'Home Services', headline: 'Perfect [SERVICE] Every Time - Book in 60 Seconds', body: 'Trusted by [NUMBER] homeowners. Professional, reliable, satisfaction guaranteed. Your home deserves the best.', cta: 'Book Online Now', bestFor: 'Cleaning services, home repairs, landscaping' },
+            { id: 24, category: 'lifestyle', title: 'Subscription Box', headline: 'Monthly [PRODUCT TYPE] Delivered - Curated Just for You', body: 'Discover new favorites every month. Handpicked [PRODUCTS] that match your style and preferences.', cta: 'Get Your First Box', bestFor: 'Subscription services, monthly boxes, curated products' }
+        ];
+
+        let originalTemplate = null;
+
+        function renderTemplates(templatesToShow = templates) {
+            const grid = document.getElementById('templatesGrid');
+            grid.innerHTML = '';
+
+            const sortedTemplates = templatesToShow.sort((a, b) => a.id - b.id);
+
+            sortedTemplates.forEach(template => {
+                const card = document.createElement('div');
+                card.className = 'template-card bg-white rounded-xl shadow-md p-6 cursor-pointer hover:shadow-lg flex flex-col justify-between';
+                card.onclick = () => openModal(template);
+                
+                const categoryColors = {
+                    tech: 'bg-blue-100 text-blue-800',
+                    business: 'bg-green-100 text-green-800',
+                    fintech: 'bg-emerald-100 text-emerald-800',
+                    health: 'bg-red-100 text-red-800',
+                    education: 'bg-yellow-100 text-yellow-800',
+                    ecommerce: 'bg-orange-100 text-orange-800',
+                    gaming: 'bg-purple-100 text-purple-800',
+                    luxury: 'bg-pink-100 text-pink-800',
+                    creative: 'bg-indigo-100 text-indigo-800',
+                    lifestyle: 'bg-cyan-100 text-cyan-800',
+                };
+
+                const categoryText = {
+                    tech: 'Tech',
+                    business: 'Business',
+                    fintech: 'Fintech',
+                    health: 'Health',
+                    education: 'Education',
+                    ecommerce: 'E-commerce',
+                    gaming: 'Gaming',
+                    luxury: 'Luxury',
+                    creative: 'Creative',
+                    lifestyle: 'Lifestyle',
+                }
+
+                card.innerHTML = `
+                    <div>
+                        <span class="inline-block px-3 py-1 text-xs font-medium rounded-full ${categoryColors[template.category] || 'bg-gray-100 text-gray-800'}">${categoryText[template.category] || 'General'}</span>
+                        <h3 class="text-lg font-bold text-gray-800 mt-4">${template.title}</h3>
+                    </div>
+                    <p class="text-sm text-indigo-600 font-semibold mt-4">View Template →</p>
+                `;
+                
+                grid.appendChild(card);
+            });
+        }
+
+        function filterCategory(button, category) {
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('bg-indigo-600', 'text-white');
+                btn.classList.add('bg-white', 'text-gray-700');
+            });
+            button.classList.add('bg-indigo-600', 'text-white');
+            button.classList.remove('bg-white', 'text-gray-700');
+
+            if (category === 'all') {
+                renderTemplates(templates);
+            } else {
+                const filtered = templates.filter(t => t.category === category);
+                renderTemplates(filtered);
+            }
+        }
+
+        function openModal(template) {
+            originalTemplate = { ...template };
+            document.getElementById('modalTitle').innerText = template.title;
+            document.getElementById('modalHeadline').value = template.headline;
+            document.getElementById('modalBody').value = template.body;
+            document.getElementById('modalCTA').value = template.cta;
+            document.getElementById('modalBestFor').innerText = template.bestFor;
+            document.getElementById('templateModal').classList.remove('hidden');
+            document.getElementById('templateModal').classList.add('flex');
+        }
+
+        function closeModal() {
+            document.getElementById('templateModal').classList.add('hidden');
+            document.getElementById('templateModal').classList.remove('flex');
+            originalTemplate = null;
+        }
+
+        function resetTemplate() {
+            if (originalTemplate) {
+                document.getElementById('modalHeadline').value = originalTemplate.headline;
+                document.getElementById('modalBody').value = originalTemplate.body;
+                document.getElementById('modalCTA').value = originalTemplate.cta;
+            }
+        }
+
+        function copyTemplate() {
+            const headline = document.getElementById('modalHeadline').value;
+            const body = document.getElementById('modalBody').value;
+            const cta = document.getElementById('modalCTA').value;
+            
+            const fullText = `Headline:\n${headline}\n\nBody:\n${body}\n\nCall-to-Action:\n${cta}`;
+            
+            navigator.clipboard.writeText(fullText).then(() => {
+                const successMsg = document.getElementById('copySuccess');
+                successMsg.classList.remove('hidden');
+                setTimeout(() => {
+                    successMsg.classList.add('hidden');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        }
+
+        // Initial render on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTemplates();
+        });
+    </script>
+</body>
+</html>

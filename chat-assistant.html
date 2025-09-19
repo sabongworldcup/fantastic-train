@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Chat Assistant - Video Fixer</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f8f8f8; margin: 0; }
+    #chat { width: 95%; max-width: 600px; margin: 40px auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 12px #ccc; padding: 24px; }
+    #messages { height: 320px; overflow-y: auto; border: 1px solid #eee; padding: 10px; background: #fafbfc; border-radius: 4px; margin-bottom: 16px;}
+    .msg { margin: 10px 0; }
+    .user { color: #0066cc; }
+    .assistant { color: #333; }
+    #input-area { display: flex; gap: 8px; }
+    #user-input { flex: 1; padding: 12px; font-size: 16px; border-radius: 4px; border: 1px solid #ccc;}
+    #send-btn { padding: 0 24px; font-size: 16px; cursor: pointer; border-radius: 4px; border: none; background: #0066cc; color: #fff;}
+  </style>
+</head>
+<body>
+  <div id="chat">
+    <h2>🛠️ Chat Assistant: Video/AI Troubleshooter</h2>
+    <div id="messages"></div>
+    <div id="input-area">
+      <input id="user-input" type="text" placeholder="Describe your issue or paste error message..." autocomplete="off" />
+      <button id="send-btn">Send</button>
+    </div>
+    <p style="font-size:13px; color:#888; margin-top:10px;">Try: "My 4K video won't play", "Here is my code...", or paste a console error.</p>
+  </div>
+  <script>
+    // --- Rules for assistant logic ---
+    const troubleshootingTips = [
+      { 
+        match: /not playing|won't play|nothing happens|doesn't play/i,
+        reply: `Let's check a few things:<br>
+        1. Is your video file path correct and accessible? Try opening it directly in your browser.<br>
+        2. Does your <b>&lt;video&gt;</b> tag have the correct <b>src</b>?<br>
+        3. Are you seeing any errors in the browser console? Paste them here!<br>
+        4. Try using <code>video.muted = true</code> before calling <code>video.play()</code> for autoplay.<br>
+        5. If you use a Python backend, ensure it serves <b>.mp4</b> with the <b>video/mp4</b> content type.`
+      },
+      { 
+        match: /404|not found/i,
+        reply: `A 404 means the file path is wrong or the server isn't serving the file.<br>
+        - Double check the path in your <b>src</b>.<br>
+        - Try accessing <code>http://localhost:8000/your-file.mp4</code> directly.<br>
+        - If you're using Python (Flask, Django, etc.), make sure the file is in your static directory.`
+      },
+      {
+        match: /cors|cross[- ]origin/i,
+        reply: `CORS errors happen when your browser blocks resources from another domain.<br>
+        - If your video is on another server, add CORS headers.<br>
+        - For Python: <code>from flask_cors import CORS; CORS(app)</code>`
+      },
+      {
+        match: /mime|content[- ]type/i,
+        reply: `Check your backend is sending the correct MIME type.<br>
+        - For <b>.mp4</b> files, it must be <code>video/mp4</code>.<br>
+        - Example (Python Flask):<br>
+        <code>return send_from_directory('static', filename, mimetype='video/mp4')</code>`
+      },
+      {
+        match: /autoplay/i,
+        reply: `Browsers often block autoplay with sound.<br>
+        - Set <code>video.muted = true</code> before <code>video.play()</code>.<br>
+        - Or require a user button click to start playback.`
+      },
+      {
+        match: /code|html|javascript|video\.src|video\.play|load/i,
+        reply: `Paste your code here, and I'll check for problems. Make sure your <b>video.src</b> is correct, use <code>video.load()</code> after changing src, and wrap <code>video.play()</code> in a try/catch.`
+      },
+      {
+        match: /error/i,
+        reply: `Paste the full error message you see in the browser console or terminal. I'll analyze it and suggest a fix!`
+      },
+      {
+        match: /thank|works|fixed|solved/i,
+        reply: `Great! If you have another issue, just describe it or paste errors/code. I'm here to help!`
+      }
+    ];
+
+    function assistantReply(userMsg) {
+      for (const tip of troubleshootingTips) {
+        if (tip.match.test(userMsg)) return tip.reply;
+      }
+      // Default fallback
+      return `Please describe your issue in detail, or paste any code/error message. I'll help you debug and fix it!`;
+    }
+
+    // --- UI/Chat Logic ---
+    const messages = document.getElementById('messages');
+    function addMsg(msg, sender) {
+      const div = document.createElement('div');
+      div.className = 'msg ' + sender;
+      div.innerHTML = `<b>${sender === 'user' ? 'You' : 'Assistant'}:</b> ${msg}`;
+      messages.appendChild(div);
+      messages.scrollTop = messages.scrollHeight;
+    }
+    function handleUserInput() {
+      const input = document.getElementById('user-input');
+      const userMsg = input.value.trim();
+      if (!userMsg) return;
+      addMsg(userMsg, 'user');
+      setTimeout(() => addMsg(assistantReply(userMsg), 'assistant'), 600);
+      input.value = '';
+    }
+    document.getElementById('send-btn').onclick = handleUserInput;
+    document.getElementById('user-input').onkeydown = (e) => { if (e.key === 'Enter') handleUserInput(); };
+
+    // Welcoming message
+    addMsg("Hi! I'm your troubleshooting assistant for video playback, AI, and web integration issues. Describe your problem or paste code/errors below.", 'assistant');
+  </script>
+</body>
+</html>
